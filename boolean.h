@@ -1,7 +1,9 @@
-// boolean.h
-# ifndef __boolean__
-# define __boolean__
-# define TRUE 1
-# define FALSE 0
-# define boolean unsigned char
-# endif
+#ifndef BOOLEAN_H
+#define BOOLEAN_H
+
+#define boolean unsigned char
+
+#define true 1
+#define false 0
+
+#endif
