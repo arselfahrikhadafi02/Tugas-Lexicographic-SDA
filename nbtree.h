@@ -28,6 +28,8 @@ addressTrie AlokasiTrieNode(char c);
 
 void InsertWordToTrie(addressTrie* root, char* word);
 
+static void DFS(addressTrie node, char *buffer, int depth, int *count);
+
 void PrintSuggestions(addressTrie prefixNode, char* currentWord, int* suggestionCount);
 
 void AddSynonymToTrie(addressTrie root, char* word, char* synonym);
