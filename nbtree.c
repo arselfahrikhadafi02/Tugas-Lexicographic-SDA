@@ -17,6 +17,8 @@ addressTrie AlokasiTrieNode(char c){
         FirstChild(P) = NULL;
         NextSibling(P) = NULL;
     }
+
+    return P;
 }
 
 void InsertWordToTrie(addressTrie* root, char* word){
@@ -28,7 +30,7 @@ void InsertWordToTrie(addressTrie* root, char* word){
         *root = AlokasiTrieNode(word[0]);
     }
 
-    addressTrie current = 0;
+    addressTrie current = *root;
     int i = 0;
 
     while (word[i] != '\0'){
@@ -55,7 +57,7 @@ void InsertWordToTrie(addressTrie* root, char* word){
         
         if (word [i+1] == '\0')
         {
-            IsEndWord(temp) == true;
+            IsEndWord(temp) = true;
             break;
         }
         
