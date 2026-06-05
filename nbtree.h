@@ -18,7 +18,7 @@ typedef struct tTrieNode{
 };
 
 #define Info(P)        (P)->info
-#define IsEndWord(P)       (P)->isEndWord
+#define IsEndWord(P)   (P)->isEndWord
 #define Synonims(P)    (P)->synonims
 #define Thesaurus(P)   (P)->thesaurus
 #define FirstChild(P)  (P)->firstChild
