@@ -12,8 +12,8 @@ addressTrie AlokasiTrieNode(char c){
     if(P != NULL){
         Info(P) = c;
         IsEndWord(P) = false;
-        Synonims(P) = NULL;
-        Thesaurus(P) = NULL;
+        // Synonims(P) = NULL;
+        // Thesaurus(P) = NULL;
         FirstChild(P) = NULL;
         NextSibling(P) = NULL;
     }
@@ -70,7 +70,7 @@ void InsertWordToTrie(addressTrie* root, char* word){
     }
 }
 
-static void DFS(addressTrie node, char *buffer, int depth, int *count){
+static void DFS(addressTrie node, char *buffer, int depth, int *count, char suggestions[][100]){
     if (node == NULL) return;
 
     /* Simpan karakter node ini ke buffer */
@@ -81,19 +81,77 @@ static void DFS(addressTrie node, char *buffer, int depth, int *count){
         buffer[depth + 1] = '\0';
         (*count)++;
         printf("  [%d] %s\n", *count, buffer);
+        strcpy(suggestions[*count - 1], buffer);  /* simpan ke array */
     }
 
     /* Telusuri anak (huruf berikutnya dalam kata) */
-    DFS(FirstChild(node),  buffer, depth + 1, count);
+    DFS(FirstChild(node),  buffer, depth + 1, count, suggestions);
     
     /* Telusuri sibling (huruf alternatif di level yang sama) */
-    DFS(NextSibling(node), buffer, depth, count);
+    DFS(NextSibling(node), buffer, depth, count, suggestions);
 }
 
-void PrintSuggestions(addressTrie prefixNode, char* currentWord, int* suggestionCount){
+void PrintSuggestions(addressTrie root, char* prefix, int* suggestionCount, char suggestions[][100]){
+    /* validasi input */
+    if (root == NULL || prefix == NULL || prefix[0] == '\0') {
+        return;
+    }
 
-}
+    /* --- Fase 1: navigasi ke ujung prefix --- */
+    addressTrie curr = root;
+    int i = 0;
 
-void AddSynonymToTrie(addressTrie root, char* word, char* synonym);
+    while (prefix[i] != '\0') {
+        /* cari prefix[i] di antara sibling level ini */
+        while (curr != NULL && Info(curr) != prefix[i]) {
+            curr = NextSibling(curr);
+        }
 
-void AddThesaurusToTrie(addressTrie root, char* word, char* thesaurusWord);
+        /* karakter tidak ditemukan: prefix tidak ada di trie */
+        if (curr == NULL) {
+            printf("  (tidak ada saran untuk \"%s\")\n", prefix);
+            return;
+        }
+
+        /* masih ada karakter prefix selanjutnya: turun ke firstChild */
+        if (prefix[i + 1] != '\0') {
+            curr = FirstChild(curr);
+        }
+
+        i++;
+    }
+
+    /* curr sekarang menunjuk ke node huruf terakhir prefix */
+
+    /* --- Fase 2: siapkan buffer, salin prefix --- */
+    char buffer[100];
+    int j;
+    for (j = 0; j < i - 1; j++) {
+        buffer[j] = prefix[j];
+    }
+    /* buffer[i-1] dan seterusnya akan diisi oleh DFS */
+
+    /* --- Fase 3: DFS dari node ujung prefix --- */
+    /* Fase 3: DFS dari node ujung prefix */
+    *suggestionCount = 0;
+
+    /* cek apakah prefix itu sendiri kata valid */
+    buffer[i - 1] = Info(curr);
+    if (IsEndWord(curr)) {
+        buffer[i] = '\0';
+        (*suggestionCount)++;
+        printf("  [%d] %s\n", *suggestionCount, buffer);
+        strcpy(suggestions[*suggestionCount - 1], buffer);
+    }
+
+    /* DFS hanya ke firstChild, BUKAN nextSibling dari ujung prefix */
+    DFS(FirstChild(curr), buffer, i, suggestionCount, suggestions);
+
+    if (*suggestionCount == 0) {
+        printf("  (tidak ada saran untuk \"%s\")\n", prefix);
+    }
+    }
+
+// void AddSynonymToTrie(addressTrie root, char* word, char* synonym);
+
+// void AddThesaurusToTrie(addressTrie root, char* word, char* thesaurusWord);
