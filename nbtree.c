@@ -17,7 +17,6 @@ addressTrie AlokasiTrieNode(char c){
         FirstChild(P) = NULL;
         NextSibling(P) = NULL;
     }
-
     return P;
 }
 
@@ -71,7 +70,29 @@ void InsertWordToTrie(addressTrie* root, char* word){
     }
 }
 
-void PrintSuggestions(addressTrie prefixNode, char* currentWord, int* suggestionCount);
+static void DFS(addressTrie node, char *buffer, int depth, int *count){
+    if (node == NULL) return;
+
+    /* Simpan karakter node ini ke buffer */
+    buffer[depth] = Info(node);
+
+    /* Kalau ini akhir kata, cetak */
+    if (IsEndWord(node)) {
+        buffer[depth + 1] = '\0';
+        (*count)++;
+        printf("  [%d] %s\n", *count, buffer);
+    }
+
+    /* Telusuri anak (huruf berikutnya dalam kata) */
+    DFS(FirstChild(node),  buffer, depth + 1, count);
+    
+    /* Telusuri sibling (huruf alternatif di level yang sama) */
+    DFS(NextSibling(node), buffer, depth, count);
+}
+
+void PrintSuggestions(addressTrie prefixNode, char* currentWord, int* suggestionCount){
+
+}
 
 void AddSynonymToTrie(addressTrie root, char* word, char* synonym);
 
