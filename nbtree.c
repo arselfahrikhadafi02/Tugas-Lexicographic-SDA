@@ -12,7 +12,7 @@ addressTrie AlokasiTrieNode(char c){
     if(P != NULL){
         Info(P) = c;
         IsEndWord(P) = false;
-        // Synonims(P) = NULL;
+        Synonims(P) = NULL;
         // Thesaurus(P) = NULL;
         FirstChild(P) = NULL;
         NextSibling(P) = NULL;
@@ -152,6 +152,57 @@ void PrintSuggestions(addressTrie root, char* prefix, int* suggestionCount, char
     }
     }
 
-// void AddSynonymToTrie(addressTrie root, char* word, char* synonym);
+void AddSynonymToTrie(addressTrie root, char* word, char* synonym){
+    if (root == NULL || word == NULL || synonym == NULL) return;
+
+    addressTrie curr = root;
+    int i = 0;
+
+    /* Menelusuri jalur huruf dari kata dasar */
+    while (word[i] != '\0') {
+        while (curr != NULL && Info(curr) != word[i]) {
+            curr = NextSibling(curr);
+        }
+        
+        /* Jika jalur kata dasar terputus / tidak ada di dalam Trie */
+        if (curr == NULL) return; 
+        
+        if (word[i+1] != '\0') {
+            curr = FirstChild(curr);
+        }
+        i++;
+    }
+
+    /* Pastikan node terakhir benar-benar valid sebagai ujung kata */
+    if (IsEndWord(curr)) {
+        /* Panggil fungsi InsertWord dari dictionary.c */
+        InsertWord(&Synonims(curr), synonym); 
+    }
+}
+
+addressTrie SearchPrefixNode(addressTrie root, char* prefix){
+    if (root == NULL || prefix == NULL || prefix[0] == '\0') return NULL;
+
+    addressTrie curr = root;
+    int i = 0;
+
+    while (prefix[i] != '\0') {
+        while (curr != NULL && Info(curr) != prefix[i]) {
+            curr = NextSibling(curr);
+        }
+        if (curr == NULL) return NULL; /* Kata tidak ada di Trie */
+        
+        if (prefix[i+1] != '\0') {
+            curr = FirstChild(curr);
+        }
+        i++;
+    }
+
+    /* Mengembalikan node jika node tersebut memang akhir dari kata yang valid */
+    if (IsEndWord(curr)) {
+        return curr;
+    }
+    return NULL;
+}
 
 // void AddThesaurusToTrie(addressTrie root, char* word, char* thesaurusWord);

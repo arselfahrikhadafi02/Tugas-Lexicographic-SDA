@@ -2,7 +2,7 @@
 #define NBTREE_H
 
 #include "boolean.h"
-// #include "dictionary.h"
+#include "dictionary.h"
 
 typedef struct tTrieNode* addressTrie;
 
@@ -10,7 +10,7 @@ struct tTrieNode{
     char info;
     boolean isEndWord;
 
-    // addressWord synonims;
+    addressWord synonims;
     // addressWord thesaurus;
 
     addressTrie firstChild;
@@ -19,7 +19,7 @@ struct tTrieNode{
 
 #define Info(P)        (P)->info
 #define IsEndWord(P)   (P)->isEndWord
-// #define Synonims(P)    (P)->synonims
+#define Synonims(P)    (P)->synonims
 // #define Thesaurus(P)   (P)->thesaurus
 #define FirstChild(P)  (P)->firstChild
 #define NextSibling(P) (P)->nextSibling
@@ -32,7 +32,9 @@ static void DFS(addressTrie node, char *buffer, int depth, int *count, char sugg
 
 void PrintSuggestions(addressTrie root, char* prefix, int* suggestionCount, char suggestions[][100]);
 
-// void AddSynonymToTrie(addressTrie root, char* word, char* synonym);
+void AddSynonymToTrie(addressTrie root, char* word, char* synonym);
+
+addressTrie SearchPrefixNode(addressTrie root, char* prefix);
 
 // void AddThesaurusToTrie(addressTrie root, char* word, char* thesaurusWord);
 

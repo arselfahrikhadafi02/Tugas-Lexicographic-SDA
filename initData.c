@@ -71,4 +71,14 @@ void InitData(addressTrie *root) {
     InsertWordToTrie(root, "xenon");
     InsertWordToTrie(root, "yakin");
     InsertWordToTrie(root, "zebra");
+
+    AddSynonymToTrie(*root, "baca", "membaca");
+    AddSynonymToTrie(*root, "baca", "menelaah");
+    AddSynonymToTrie(*root, "baca", "mengeja");
+
+    AddSynonymToTrie(*root, "cepat", "kilat");
+    AddSynonymToTrie(*root, "cepat", "laju");
+
+    AddSynonymToTrie(*root, "makan", "mengonsumsi");
+    AddSynonymToTrie(*root, "makan", "menyantap");
 }
