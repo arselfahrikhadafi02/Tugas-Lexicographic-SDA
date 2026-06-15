@@ -180,28 +180,28 @@ void AddSynonymToTrie(addressTrie root, char* word, char* synonym){
     }
 }
 
-addressTrie SearchPrefixNode(addressTrie root, char* prefix){
-    if (root == NULL || prefix == NULL || prefix[0] == '\0') return NULL;
-
+/* Fungsi untuk mencari dan mengembalikan alamat node dari sebuah kata utuh */
+addressTrie SearchNode(addressTrie root, char* word) {
+    if (root == NULL || word == NULL) return NULL;
+    
     addressTrie curr = root;
     int i = 0;
-
-    while (prefix[i] != '\0') {
-        while (curr != NULL && Info(curr) != prefix[i]) {
+    
+    while (word[i] != '\0') {
+        while (curr != NULL && Info(curr) != word[i]) {
             curr = NextSibling(curr);
         }
         if (curr == NULL) return NULL; /* Kata tidak ada di Trie */
         
-        if (prefix[i+1] != '\0') {
+        if (word[i+1] != '\0') {
             curr = FirstChild(curr);
         }
         i++;
     }
-
-    /* Mengembalikan node jika node tersebut memang akhir dari kata yang valid */
-    if (IsEndWord(curr)) {
-        return curr;
-    }
+    
+    /* Pastikan ini benar-benar ujung kata, bukan sekadar awalan */
+    if (IsEndWord(curr)) return curr;
+    
     return NULL;
 }
 

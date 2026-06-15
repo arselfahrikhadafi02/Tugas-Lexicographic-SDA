@@ -34,7 +34,7 @@ void PrintSuggestions(addressTrie root, char* prefix, int* suggestionCount, char
 
 void AddSynonymToTrie(addressTrie root, char* word, char* synonym);
 
-addressTrie SearchPrefixNode(addressTrie root, char* prefix);
+addressTrie SearchNode(addressTrie root, char* word);
 
 // void AddThesaurusToTrie(addressTrie root, char* word, char* thesaurusWord);
 

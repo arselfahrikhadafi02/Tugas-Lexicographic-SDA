@@ -3,7 +3,7 @@
 #include <string.h>
 #include "dictionary.h"
 
-AlokasiWordNode(char* word){
+addressWord AlokasiWordNode(char* word){
     addressWord P = (addressWord)malloc(sizeof(WordNode));
     if (P != NULL) {
         strcpy(Word(P), word);
@@ -12,7 +12,7 @@ AlokasiWordNode(char* word){
     return P;
 }
 
-InsertWord(addressWord* list, char* word){
+void InsertWord(addressWord* list, char* word){
     addressWord P = AlokasiWordNode(word);
     if (P != NULL) {
         /* Tambah di akhir (Tail) agar urutannya sesuai saat data di-insert */
@@ -28,7 +28,7 @@ InsertWord(addressWord* list, char* word){
     }
 }
 
-PrintWordList(addressWord list){
+void PrintWordList(addressWord list){
     int i = 1;
     addressWord curr = list;
     while (curr != NULL) {
@@ -38,7 +38,7 @@ PrintWordList(addressWord list){
     }
 }
 
-SearchWord(addressWord list, int n){
+char* SearchWord(addressWord list, int n){
     int i = 1;
     addressWord curr = list;
     while (curr != NULL) {

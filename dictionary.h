@@ -15,12 +15,12 @@ typedef struct tWordNode {
 #define Word(P) (P)->word
 #define Next(P) (P)->next
 
-AlokasiWordNode(char* word);
+addressWord AlokasiWordNode(char* word);
 
-InsertWord(addressWord* list, char* word);
+void InsertWord(addressWord* list, char* word);
 
-PrintWordList(addressWord list);
+void PrintWordList(addressWord list);
 
-SearchWord(addressWord list, int n);
+char* SearchWord(addressWord list, int n);
 
 #endif
