@@ -1,92 +1,95 @@
-#include "initdata.h"
+#include "initData.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* Fungsi sederhana ala mahasiswa untuk hapus karakter Enter (\r atau \n) di akhir baris */
+void hapusNewline(char *str) {
+    str[strcspn(str, "\r\n")] = 0;
+}
 
 void InitData(addressTrie *root) {
-    InsertWordToTrie(root, "baca");
-    InsertWordToTrie(root, "bacaan");
-    InsertWordToTrie(root, "bacan");
-    InsertWordToTrie(root, "baru");
-    InsertWordToTrie(root, "barat");
-    InsertWordToTrie(root, "barang");
-    InsertWordToTrie(root, "cari");
-    InsertWordToTrie(root, "cepat");
-    InsertWordToTrie(root, "cerita");
-    InsertWordToTrie(root, "dalam");
-    InsertWordToTrie(root, "damai");
-    InsertWordToTrie(root, "dapat");
-    InsertWordToTrie(root, "dapur");
-    InsertWordToTrie(root, "ekor");
-    InsertWordToTrie(root, "emas");
-    InsertWordToTrie(root, "enak");
-    InsertWordToTrie(root, "fajar");
-    InsertWordToTrie(root, "fakta");
-    InsertWordToTrie(root, "fasilitas");
-    InsertWordToTrie(root, "gajah");
-    InsertWordToTrie(root, "gala");
-    InsertWordToTrie(root, "garis");
-    InsertWordToTrie(root, "hati");
-    InsertWordToTrie(root, "hujan");
-    InsertWordToTrie(root, "hutan");
-    InsertWordToTrie(root, "ikan");
-    InsertWordToTrie(root, "ikut");
-    InsertWordToTrie(root, "ilmu");
-    InsertWordToTrie(root, "jari");
-    InsertWordToTrie(root, "jalan");
-    InsertWordToTrie(root, "jasa");
-    InsertWordToTrie(root, "kaca");
-    InsertWordToTrie(root, "kabar");
-    InsertWordToTrie(root, "kacamata");
-    InsertWordToTrie(root, "laba");
-    InsertWordToTrie(root, "labu");
-    InsertWordToTrie(root, "laci");
-    InsertWordToTrie(root, "makan");
-    InsertWordToTrie(root, "malam");
-    InsertWordToTrie(root, "manis");
-    InsertWordToTrie(root, "nasi");
-    InsertWordToTrie(root, "nasi goreng");
-    InsertWordToTrie(root, "nasi uduk");
-    InsertWordToTrie(root, "orang");
-    InsertWordToTrie(root, "otak");
-    InsertWordToTrie(root, "padi");
-    InsertWordToTrie(root, "pagar");
-    InsertWordToTrie(root, "pakai");
-    InsertWordToTrie(root, "palu");
-    InsertWordToTrie(root, "qurban");
-    InsertWordToTrie(root, "rasa");
-    InsertWordToTrie(root, "rata");
-    InsertWordToTrie(root, "rumah");
-    InsertWordToTrie(root, "sapi");
-    InsertWordToTrie(root, "sapu");
-    InsertWordToTrie(root, "satu");
-    InsertWordToTrie(root, "tahu");
-    InsertWordToTrie(root, "taman");
-    InsertWordToTrie(root, "tanah");
-    InsertWordToTrie(root, "tangan");
-    InsertWordToTrie(root, "uang");
-    InsertWordToTrie(root, "ular");
-    InsertWordToTrie(root, "umur");
-    InsertWordToTrie(root, "vaksin");
-    InsertWordToTrie(root, "waktu");
-    InsertWordToTrie(root, "warna");
-    InsertWordToTrie(root, "wisata");
-    InsertWordToTrie(root, "xenon");
-    InsertWordToTrie(root, "yakin");
-    InsertWordToTrie(root, "zebra");
+    FILE *file;
+    char buffer[2048];
+    char *kataDasar, *kataTerkait;
 
-    AddSynonymToTrie(*root, "baca", "membaca");
-    AddSynonymToTrie(*root, "baca", "menelaah");
-    AddSynonymToTrie(*root, "baca", "mengeja");
+    /* =========================================================
+       1. Baca Kamus Suggestion (KataIndonesia.txt)
+       ========================================================= */
+    file = fopen("KataIndonesia.txt", "r");
+    if (file != NULL) {
+        /* Baca baris per baris sampai habis */
+        while (fgets(buffer, sizeof(buffer), file)) {
+            hapusNewline(buffer);
+            if (strlen(buffer) > 0) {
+                InsertWordToTrie(root, buffer);
+            }
+        }
+        fclose(file);
+        printf("[+] Kamus KataIndonesia.txt berhasil diload!\n");
+    } else {
+        printf("[-] Gagal membuka KataIndonesia.txt\n");
+    }
 
-    AddSynonymToTrie(*root, "cepat", "kilat");
-    AddSynonymToTrie(*root, "cepat", "laju");
+    /* =========================================================
+       2. Baca Kamus Sinonim (sinonim.csv)
+       ========================================================= */
+    file = fopen("sinonim.csv", "r");
+    if (file != NULL) {
+        while (fgets(buffer, sizeof(buffer), file)) {
+            hapusNewline(buffer);
+            
+            /* Ambil kata pertama sebelum tanda koma */
+            kataDasar = strtok(buffer, ",");
+            if (kataDasar != NULL) {
+                
+                /* Looping untuk mengambil sisa kata setelahnya */
+                kataTerkait = strtok(NULL, ",");
+                while (kataTerkait != NULL) {
+                    AddSynonymToTrie(*root, kataDasar, kataTerkait);
+                    kataTerkait = strtok(NULL, ",");
+                }
+            }
+        }
+        fclose(file);
+        printf("[+] Kamus sinonim.csv berhasil diload!\n");
+    } else {
+        printf("[-] Gagal membuka sinonim.csv\n");
+    }
 
-    AddSynonymToTrie(*root, "makan", "mengonsumsi");
-    AddSynonymToTrie(*root, "makan", "menyantap");
+    /* =========================================================
+       3. Baca Kamus Thesaurus (Thesaurus.txt)
+       ========================================================= */
+    file = fopen("Thesaurus.txt", "r");
+    if (file != NULL) {
+        while (fgets(buffer, sizeof(buffer), file)) {
+            hapusNewline(buffer);
+            
+            kataDasar = strtok(buffer, ",");
+            if (kataDasar != NULL) {
+                
+                /* Trik sederhana: Di Thesaurus kadang ada tag kelas kata (misal: "abadi a awet").
+                   Kita potong saja string-nya di spasi pertama agar kataDasar cuma berisi "abadi" */
+                char *spasi = strchr(kataDasar, ' ');
+                if (spasi != NULL) {
+                    *spasi = '\0'; 
+                }
 
-    AddThesaurusToTrie(*root, "baca", "literasi");
-    AddThesaurusToTrie(*root, "baca", "perpustakaan");
-    AddThesaurusToTrie(*root, "baca", "buku");
-
-    AddThesaurusToTrie(*root, "cepat", "kecepatan");
-    AddThesaurusToTrie(*root, "cepat", "laju");
-
+                kataTerkait = strtok(NULL, ",");
+                while (kataTerkait != NULL) {
+                    /* Kalau ada spasi ekstra setelah koma (misal: ", awet"), kita geser 1 karakter */
+                    if (kataTerkait[0] == ' ') {
+                        kataTerkait++; 
+                    }
+                    
+                    AddThesaurusToTrie(*root, kataDasar, kataTerkait);
+                    kataTerkait = strtok(NULL, ",");
+                }
+            }
+        }
+        fclose(file);
+        printf("[+] Kamus Thesaurus.txt berhasil diload!\n");
+    } else {
+        printf("[-] Gagal membuka Thesaurus.txt\n");
+    }
 }
