@@ -31,17 +31,21 @@ void InsertWord(addressWord* list, char* word){
 void PrintWordList(addressWord list){
     int i = 1;
     addressWord curr = list;
-    while (curr != NULL) {
+    while (curr != NULL && i <= 20) { /* Batasi maksimal 20 sinonim/thesaurus yang ditampilkan */
         printf("  [%d] %s\n", i, Word(curr));
         curr = Next(curr);
         i++;
+    }
+    
+    if (curr != NULL) {
+        printf("  ... (sisa kata lainnya tidak ditampilkan)\n");
     }
 }
 
 char* SearchWord(addressWord list, int n){
     int i = 1;
     addressWord curr = list;
-    while (curr != NULL) {
+    while (curr != NULL && i <= 20) { /* Batasi maksimal 20 sinonim/thesaurus yang ditampilkan */
         if (i == n) {
             return Word(curr);
         }

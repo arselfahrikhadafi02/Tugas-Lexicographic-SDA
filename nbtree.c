@@ -73,6 +73,9 @@ void InsertWordToTrie(addressTrie* root, char* word){
 static void DFS(addressTrie node, char *buffer, int depth, int *count, char suggestions[][100]){
     if (node == NULL) return;
 
+    /* Batasi maksimal 20 saran yang ditampilkan */
+    if (*count >= 20) return;
+
     /* Simpan karakter node ini ke buffer */
     buffer[depth] = Info(node);
 
