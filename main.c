@@ -6,7 +6,7 @@
 #include "initData.h"
 #include "boolean.h"
 
-// gcc main.c nbtree.c initData.c  -o Program
+// gcc main.c nbtree.c initData.c dictionary.c -o Program
 
 int main()
 {
@@ -100,8 +100,34 @@ int main()
                     break;
                 }
                 case 2:
-                    /* Bagian Thesaurus (Kerjakan Nanti) */
-                    printf("\n  (Fitur Thesaurus belum tersedia)\n");
+                    /* ================= STATE 4: THESAURUS ================= */
+                    addressTrie nodeKata = SearchNode(root, kataAktif);
+                    
+                    /* Cek apakah kata ada di Trie dan punya thesaurus */
+                    if (nodeKata != NULL && Thesaurus(nodeKata) != NULL) {
+                        printf("\nThesaurus untuk \"%s\":\n", kataAktif);
+                        
+                        /* Panggil fungsi Print dari dictionary.c buatan Arsel */
+                        PrintWordList(Thesaurus(nodeKata)); 
+                        
+                        printf("  [0] Kembali\n");
+                        printf("Pilih nomor: ");
+                        
+                        int pilThesaurus;
+                        scanf("%d", &pilThesaurus);
+                        
+                        if (pilThesaurus > 0) {
+                            /* Ambil string kata menggunakan fungsi buatan Arsel */
+                            char* kataBaru = SearchWord(Thesaurus(nodeKata), pilThesaurus);
+                            if (kataBaru != NULL) {
+                                strcpy(kataAktif, kataBaru); /* Timpa kata aktif */
+                            } else {
+                                printf("  (Nomor tidak valid)\n");
+                            }
+                        }
+                    } else {
+                        printf("\n  (Tidak ada data thesaurus untuk \"%s\")\n", kataAktif);
+                    }
                     break;
                 case 3:
                     /* Sentence Builder: Gabungkan kata ke kalimat */

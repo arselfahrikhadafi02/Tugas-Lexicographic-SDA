@@ -81,4 +81,12 @@ void InitData(addressTrie *root) {
 
     AddSynonymToTrie(*root, "makan", "mengonsumsi");
     AddSynonymToTrie(*root, "makan", "menyantap");
+
+    AddThesaurusToTrie(*root, "baca", "literasi");
+    AddThesaurusToTrie(*root, "baca", "perpustakaan");
+    AddThesaurusToTrie(*root, "baca", "buku");
+
+    AddThesaurusToTrie(*root, "cepat", "kecepatan");
+    AddThesaurusToTrie(*root, "cepat", "laju");
+
 }

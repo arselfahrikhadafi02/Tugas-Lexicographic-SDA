@@ -11,7 +11,7 @@ struct tTrieNode{
     boolean isEndWord;
 
     addressWord synonims;
-    // addressWord thesaurus;
+    addressWord thesaurus;
 
     addressTrie firstChild;
     addressTrie nextSibling;
@@ -20,7 +20,7 @@ struct tTrieNode{
 #define Info(P)        (P)->info
 #define IsEndWord(P)   (P)->isEndWord
 #define Synonims(P)    (P)->synonims
-// #define Thesaurus(P)   (P)->thesaurus
+#define Thesaurus(P)   (P)->thesaurus
 #define FirstChild(P)  (P)->firstChild
 #define NextSibling(P) (P)->nextSibling
 
@@ -36,6 +36,6 @@ void AddSynonymToTrie(addressTrie root, char* word, char* synonym);
 
 addressTrie SearchNode(addressTrie root, char* word);
 
-// void AddThesaurusToTrie(addressTrie root, char* word, char* thesaurusWord);
+void AddThesaurusToTrie(addressTrie root, char* word, char* thesaurusWord);
 
 #endif

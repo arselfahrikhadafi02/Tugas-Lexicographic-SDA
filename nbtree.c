@@ -13,7 +13,7 @@ addressTrie AlokasiTrieNode(char c){
         Info(P) = c;
         IsEndWord(P) = false;
         Synonims(P) = NULL;
-        // Thesaurus(P) = NULL;
+        Thesaurus(P) = NULL;
         FirstChild(P) = NULL;
         NextSibling(P) = NULL;
     }
@@ -205,4 +205,28 @@ addressTrie SearchNode(addressTrie root, char* word) {
     return NULL;
 }
 
-// void AddThesaurusToTrie(addressTrie root, char* word, char* thesaurusWord);
+void AddThesaurusToTrie(addressTrie root, char* word, char* thesaurusWord){
+    if (root == NULL || word == NULL || thesaurusWord == NULL) return;
+
+    addressTrie curr = root;
+    int i = 0;
+
+    while (word[i] != '\0') {
+        while (curr != NULL && Info(curr) != word[i]) {
+            curr = NextSibling(curr);
+        }
+        
+        /* Jika jalur kata dasar terputus / tidak ada di dalam Trie */
+        if (curr == NULL) return; 
+        
+        if (word[i+1] != '\0') {
+            curr = FirstChild(curr);
+        }
+        i++;
+    }
+
+    if (IsEndWord(curr)) {
+        /* Panggil fungsi InsertWord dari dictionary.c */
+        InsertWord(&Thesaurus(curr), thesaurusWord);
+    }
+}
