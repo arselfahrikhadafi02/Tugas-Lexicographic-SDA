@@ -15,7 +15,7 @@ addressWord AlokasiWordNode(char* word){
 void InsertWord(addressWord* list, char* word){
     addressWord P = AlokasiWordNode(word);
     if (P != NULL) {
-        /* Tambah di akhir (Tail) agar urutannya sesuai saat data di-insert */
+        /* Tambah di akhir*/
         if (*list == NULL) {
             *list = P;
         } else {
@@ -31,7 +31,7 @@ void InsertWord(addressWord* list, char* word){
 void PrintWordList(addressWord list){
     int i = 1;
     addressWord curr = list;
-    while (curr != NULL && i <= 20) { /* Batasi maksimal 20 sinonim/thesaurus yang ditampilkan */
+    while (curr != NULL && i <= 20) { /* Batas maksimal 20 sinonim/thesaurus yang ditampilkan */
         printf("  [%d] %s\n", i, Word(curr));
         curr = Next(curr);
         i++;
@@ -45,7 +45,7 @@ void PrintWordList(addressWord list){
 char* SearchWord(addressWord list, int n){
     int i = 1;
     addressWord curr = list;
-    while (curr != NULL && i <= 20) { /* Batasi maksimal 20 sinonim/thesaurus yang ditampilkan */
+    while (curr != NULL && i <= 20) { /* Batas maksimal 20 sinonim/thesaurus yang ditampilkan */
         if (i == n) {
             return Word(curr);
         }

@@ -14,7 +14,8 @@ int main()
     InitData(&root);
     
     int programJalan = 1;
-    char kalimat[1000] = ""; /* Buffer Sentence Builder */
+    char kalimat[1000] = ""; /* Buffer untuk menyimpan string */
+
 
     while (programJalan == 1)
     {
@@ -23,7 +24,7 @@ int main()
         int count = 0;
         char kataAktif[100];
 
-        /* ================= STATE 0: INPUT ================= */
+        /* Validasi input: cari kata dengan minimal 3 karakter */
         while(strlen(input) < 3){
             printf("\nMasukkan kata: ");
             scanf(" %s", input);
@@ -72,11 +73,10 @@ int main()
                     /* ================= STATE 3: SINONIM ================= */
                     addressTrie nodeKata = SearchNode(root, kataAktif);
                     
-                    /* Cek apakah kata ada di Trie dan punya sinonim */
                     if (nodeKata != NULL && Synonims(nodeKata) != NULL) {
                         printf("\nSinonim untuk \"%s\":\n", kataAktif);
                         
-                        /* Panggil fungsi Print dari dictionary.c buatan Arsel */
+                        /* Print linked list dari struktur dictionary */
                         PrintWordList(Synonims(nodeKata)); 
                         
                         printf("  [0] Kembali\n");
@@ -86,7 +86,7 @@ int main()
                         scanf("%d", &pilSinonim);
                         
                         if (pilSinonim > 0) {
-                            /* Ambil string kata menggunakan fungsi buatan Arsel */
+                            /* Search posisi ke-n pada linked list dan return word string */
                             char* kataBaru = SearchWord(Synonims(nodeKata), pilSinonim);
                             if (kataBaru != NULL) {
                                 strcpy(kataAktif, kataBaru); /* Timpa kata aktif */
@@ -103,11 +103,10 @@ int main()
                     /* ================= STATE 4: THESAURUS ================= */
                     addressTrie nodeKata = SearchNode(root, kataAktif);
                     
-                    /* Cek apakah kata ada di Trie dan punya thesaurus */
                     if (nodeKata != NULL && Thesaurus(nodeKata) != NULL) {
                         printf("\nThesaurus untuk \"%s\":\n", kataAktif);
                         
-                        /* Panggil fungsi Print dari dictionary.c buatan Arsel */
+                        /* Print linked list dari struktur dictionary */
                         PrintWordList(Thesaurus(nodeKata)); 
                         
                         printf("  [0] Kembali\n");
@@ -117,7 +116,7 @@ int main()
                         scanf("%d", &pilThesaurus);
                         
                         if (pilThesaurus > 0) {
-                            /* Ambil string kata menggunakan fungsi buatan Arsel */
+                            /* Search posisi ke-n pada linked list dan return word string */
                             char* kataBaru = SearchWord(Thesaurus(nodeKata), pilThesaurus);
                             if (kataBaru != NULL) {
                                 strcpy(kataAktif, kataBaru); /* Timpa kata aktif */
@@ -144,7 +143,7 @@ int main()
                     if (strlen(kalimat) > 0) {
                         strcat(kalimat, " ");
                     }
-                    strcat(kalimat, kataAktif); /* Masukkan kata terakhir */
+                    strcat(kalimat, kataAktif);
                     
                     printf("\n=====================================\n");
                     printf("KALIMAT YANG TERBENTUK:\n\"%s\"\n", kalimat);
