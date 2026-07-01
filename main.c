@@ -33,7 +33,7 @@ int main()
             }
         }
 
-        /* ================= STATE 1: SUGGESTION ================= */
+        /* -------------- STATE 1: SUGGESTION --------------- */
         PrintSuggestions(root, input, &count, suggestions);
 
         if (count > 0)
@@ -55,7 +55,7 @@ int main()
             strcpy(kataAktif, input); 
         }
 
-        /* ================= STATE 2: MENU UTAMA KATA ================= */
+        /* ------------------ STATE 2: MENU UTAMA ------------------ */
         int state2_jalan = 1;
         while(state2_jalan == 1) {
             printf("\nKata aktif: \"%s\"\n", kataAktif);
@@ -70,13 +70,13 @@ int main()
 
             switch(aksi) {
                 case 1: {
-                    /* ================= STATE 3: SINONIM ================= */
+                    /* ---------------- STATE 3: SINONIM ---------------- */
                     addressTrie nodeKata = SearchNode(root, kataAktif);
                     
                     if (nodeKata != NULL && Synonims(nodeKata) != NULL) {
                         printf("\nSinonim untuk \"%s\":\n", kataAktif);
                         
-                        /* Print linked list dari struktur dictionary */
+                        /* Print linked list dari dictionary */
                         PrintWordList(Synonims(nodeKata)); 
                         
                         printf("  [0] Kembali\n");
@@ -86,7 +86,6 @@ int main()
                         scanf("%d", &pilSinonim);
                         
                         if (pilSinonim > 0) {
-                            /* Search posisi ke-n pada linked list dan return word string */
                             char* kataBaru = SearchWord(Synonims(nodeKata), pilSinonim);
                             if (kataBaru != NULL) {
                                 strcpy(kataAktif, kataBaru); /* Timpa kata aktif */
@@ -100,7 +99,7 @@ int main()
                     break;
                 }
                 case 2:
-                    /* ================= STATE 4: THESAURUS ================= */
+                    /* --------------- STATE 4: THESAURUS ----------------- */
                     addressTrie nodeKata = SearchNode(root, kataAktif);
                     
                     if (nodeKata != NULL && Thesaurus(nodeKata) != NULL) {
@@ -116,7 +115,6 @@ int main()
                         scanf("%d", &pilThesaurus);
                         
                         if (pilThesaurus > 0) {
-                            /* Search posisi ke-n pada linked list dan return word string */
                             char* kataBaru = SearchWord(Thesaurus(nodeKata), pilThesaurus);
                             if (kataBaru != NULL) {
                                 strcpy(kataAktif, kataBaru); /* Timpa kata aktif */
@@ -129,13 +127,12 @@ int main()
                     }
                     break;
                 case 3:
-                    /* Sentence Builder: Gabungkan kata ke kalimat */
                     if (strlen(kalimat) > 0) {
                         strcat(kalimat, " "); /* Tambah spasi jika bukan kata pertama */
                     }
                     strcat(kalimat, kataAktif);
                     
-                    printf("\n[Kata disimpan! Kalimat sementara: \"%s\"]\n", kalimat);
+                    printf("\n[Kata disimpan, Kalimat sementara: \"%s\"]\n", kalimat);
                     state2_jalan = 0; /* Kembali ke input (State 0) */
                     break;
                 case 4:
